@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import "../css/profile.css";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({ displayName }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate(); 
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // ✅ Remove token
+    localStorage.removeItem("username"); // ✅ Remove username
+    localStorage.removeItem("isLoggedIn"); // ✅ Remove login status
+    window.location.reload(); // ✅ Refresh to apply changes
+  };
 
   return (
     <div className="profile-container">
@@ -18,7 +27,9 @@ const Profile = ({ displayName }) => {
       {isOpen && (
         <div className="dropdown-menu">
           <button>Edit profile</button>
-          <button className="logout-button" onClick={() => console.log("Logging out...")}>
+          <button onClick={() => navigate("/profile")}>My Services</button>
+          <button onClick={() => navigate("/profile")}>Saved Services</button>
+          <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>
         </div>

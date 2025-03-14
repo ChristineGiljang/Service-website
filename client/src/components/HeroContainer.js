@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import { useHero } from "../context/HeroContext";
 import Header from './Header';
+import Hero from './Hero'
 import "../css/hero.css";
 
 function HeroContainer() {
-  const [activeHero, setActiveHero] = useState("default");
+  const { activeHero } = useHero(); 
 
   return (
     <div>
-      <Header setActiveHero={setActiveHero} />
+      <Header />
       <Hero 
         title={
           activeHero === "default" 
@@ -18,29 +19,6 @@ function HeroContainer() {
         } 
         activeHero={activeHero}
       />
-    </div>
-  );
-}
-
-const Hero = ({ title, activeHero }) => {
-  return (
-    <div className="hero">
-      <h1>{title}</h1>
-
-      {/* Search bar for all sections */}
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder={
-            activeHero === "default"
-              ? "Search for any service..."
-              : activeHero === "find"
-              ? "Search for a service..."
-              : "Search for jobs..."
-          }
-        />
-        <button>{activeHero === "provide" ? "List Service" : "Search"}</button>
-      </div>
     </div>
   );
 };

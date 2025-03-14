@@ -1,35 +1,33 @@
-import React from "react";
-import "../css/hero.css";
+import { useHero } from "../context/HeroContext";
 
-const Hero = ({ title, activeHero }) => {
+const Hero = () => {
+  const { activeHero } = useHero(); // ✅ Use context
+  const title =
+    activeHero === "default"
+      ? "Find the best services near you, anytime, anywhere!"
+      : activeHero === "find"
+      ? "Discover top-rated services tailored to your needs!"
+      : "Offer your expertise and connect with clients!";
+
   return (
     <div className="hero">
-        <h1>{title}</h1>
+      <h1>{title}</h1>
 
-        {/* Search bar for 'default' */}
-        {activeHero === "default" && (
-          <div className="search-bar">
-            <input type="text" placeholder="Search for any service..." />
-            <button>Search</button>
-          </div>
-        )}
-
-        {/* Search bar for 'find' or 'provide' */}
-        {(activeHero === "find" || activeHero === "provide") && (
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder={
-                activeHero === "find"
-                  ? "Search for a service..."
-                  : "Search for jobs..."
-              }
-            />
-            <button>{activeHero === "find" ? "Search" : "List Service"}</button>
-          </div>
-        )}
-            </div>
-          );
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder={
+            activeHero === "default"
+              ? "Search for any service..."
+              : activeHero === "find"
+              ? "Search for a service..."
+              : "Search for jobs..."
+          }
+        />
+        <button>{activeHero === "provide" ? "List Service" : "Search"}</button>
+      </div>
+    </div>
+  );
 };
 
 export default Hero;
