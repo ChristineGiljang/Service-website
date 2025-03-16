@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
+import MobileFooter from "./MobileFooter";
+import ServiceProviderButton from "./ServiceProviderButton";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +12,7 @@ const Navbar = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeComponent, setActiveComponent] = useState("home");
   const navigate = useNavigate(); 
 
   useEffect(() => {
@@ -38,7 +41,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full border-b bg-gray-800">
+    <div className="fixed top-0 left-0 w-full border-b bg-gray-800 z-50">
       <nav className="flex items-center justify-between py-4 px-6 max-w-7xl mx-auto">
         {/* Logo */}
         <div className="text-white font-bold text-2xl">| Service Finder</div>
@@ -46,8 +49,7 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
           <div className="flex space-x-4 text-lg">
-            <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Find Services</a>
-            <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Offer Services</a>
+            <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Find Services</a>
             <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Contact Us</a>
           </div>
 
@@ -62,11 +64,6 @@ const Navbar = () => {
                   className="flex items-center space-x-2" 
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  <img
-                    src={user.profilePic || "https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0="}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full border-2 border-white object-cover"
-                  />
                   <span className="text-white">{user?.username || "User"}</span>
                   <ChevronDown 
                     size={20} 
@@ -92,8 +89,9 @@ const Navbar = () => {
             ) : (
               // ✅ If user is NOT logged in, show Login & Sign Up
               <>
-                <button onClick={() => setLoginOpen(true)} className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded-md">Login</button>
-                <button onClick={() => setSignUpOpen(true)} className="text-white px-4 py-2 rounded-md bg-[#008080] hover:bg-[#006666]">Sign Up</button>
+              <ServiceProviderButton onClick={() => setSignUpOpen(true)}/>
+                {/* <button onClick={() => setLoginOpen(true)} className="text-gray-300 hover:bg-gray-700 px-3 py-2 rounded-md">Login</button>
+                <button onClick={() => setSignUpOpen(true)} className="text-white px-4 py-2 rounded-md bg-[#008080] hover:bg-[#006666]">Sign Up</button> */}
               </>
             )}
           </div>
@@ -139,6 +137,7 @@ const Navbar = () => {
           )}
         </div>
       )}
+       <MobileFooter setActiveComponent={setActiveComponent} />
     </div>
   );
 };

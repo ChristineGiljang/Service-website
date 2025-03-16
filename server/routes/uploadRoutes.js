@@ -20,7 +20,10 @@ const upload = multer({ storage });
 router.post("/upload", upload.single("profileImage"), (req, res) => {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    res.json({ imageUrl: `/uploads/${req.file.filename}` });
+    const imageUrl = `/uploads/${req.file.filename}`;
+    console.log("Uploaded Image URL:", imageUrl);
+
+    res.json({ imageUrl });
 });
 
 module.exports = router;

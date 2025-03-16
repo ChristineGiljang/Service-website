@@ -59,7 +59,7 @@ const AccountPreferences = () => {
             if (response.ok) {
                 setUser((prevUser) => ({
                     ...prevUser,
-                    profileImage: data.imageUrl // Save uploaded image URL
+                    profileImage: `http://localhost:5000${data.imageUrl}` // Save uploaded image URL
                 }));
             } else {
                 alert("Image upload failed: " + data.message);

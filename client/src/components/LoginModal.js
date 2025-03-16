@@ -5,11 +5,8 @@ const LoginModal = ({ isOpen, onClose, switchToSignUp}) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  console.log("LoginModal props:", { isOpen, onClose, switchToSignUp });
-
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", formData);
   
     try {
       const response = await fetch("http://localhost:5000/auth/login", {
@@ -27,7 +24,7 @@ const LoginModal = ({ isOpen, onClose, switchToSignUp}) => {
         // ✅ Store user data correctly
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
-        localStorage.setItem("username", data.user.email); // Fix: Get email from user object
+        localStorage.setItem("username", data.user.username); 
         localStorage.setItem("userId", data.user.id);
         localStorage.setItem("isLoggedIn", "true");
   
