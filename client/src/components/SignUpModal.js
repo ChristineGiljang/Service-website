@@ -1,19 +1,52 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react"; 
+
 
 const SignUpModal = ({ isOpen, onClose }) => {
+  const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    address: "",
     password: "",
+    confirmPassword: "",
     type: "worker",
   });
 
-  const navigate = useNavigate(); 
+  const [errors, setErrors] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const validatePassword = (password) => {
+    const minLength = /.{8,}/; // At least 8 characters
+    const uppercase = /[A-Z]/; // At least 1 uppercase letter
+    const number = /[0-9]/; // At least 1 number
+    const specialChar = /[!@#$%^&*(),.?":{}|<>]/; // At least 1 special character
+
+    if (!minLength.test(password)) return "Password must be at least 8 characters long.";
+    if (!uppercase.test(password)) return "Password must contain at least one uppercase letter.";
+    if (!number.test(password)) return "Password must contain at least one number.";
+    if (!specialChar.test(password)) return "Password must contain at least one special character.";
+    
+    return "";
+  };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value })); 
+
+    if (name === "password") {
+      const errorMsg = validatePassword(value);
+      setErrors({ ...errors, password: errorMsg });
+    }
+
+    if (name === "confirmPassword") {
+      setErrors({
+        ...errors,
+        confirmPassword: value !== formData.password ? "Passwords do not match." : "",
+      });
+    }
   };
 
   const handleSignUp = async (e) => {
@@ -33,8 +66,8 @@ const SignUpModal = ({ isOpen, onClose }) => {
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("user", JSON.stringify({ username: formData.username, type: formData.type }));
 
-        onClose(); // Close the modal
-        navigate("/profile"); // ✅ Redirect to dashboard/sidebar
+        onClose(); 
+        navigate("/profile");
       } else {
         alert("Signup failed: " + data.message);
       }
@@ -43,82 +76,113 @@ const SignUpModal = ({ isOpen, onClose }) => {
     }
 };
 
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-6 w-96 relative">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+    <section className="bg-white rounded-lg shadow-lg w-full max-w-4xl relative">
+        <button 
+          onClick={onClose} 
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
         >
-          ✖
+          <X size={24} />
         </button>
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        <aside className="hidden lg:block lg:col-span-1">
+          <img
+            alt="Signup Visual"
+            src="https://img.freepik.com/free-photo/top-view-mechanical-supplies-composition_23-2149552422.jpg?ga=GA1.1.789066035.1742101396&semt=ais_hybrid"
+            className="h-full w-full object-cover rounded-l-lg"
+          />
+        </aside>
 
-        {/* Title */}
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
-        Sign Up as a Service Provider
-        </h2>
+        <main className="p-8 lg:col-span-2">
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">Sign Up to be a Service Pro</h1>
+          <p className="mt-4 text-gray-500">Become a Service Provider & Grow Your Business</p>
 
-        {/* Form Fields */}
-        <form className="" onSubmit={handleSignUp}>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Name
-        </label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            placeholder="Full Name"
-            className="w-full px-4 py-2 border rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
-          <input
-            type="text"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email"
-            className="w-full px-4 py-2 border rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-          Address
-        </label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            placeholder="Address"
-            className="w-full px-4 py-2 border rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-          Password
-        </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            className="w-full px-4 py-2 border rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
+          <form 
+            className="mt-8 grid grid-cols-6 gap-6"
+            onSubmit={handleSignUp}>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-[#008080] text-white py-2 rounded-md hover:bg-[#006666]"
-          >
-            Sign Up
-          </button>
-        </form>
+            <div className="col-span-6 sm:col-span-6">
+              <label className="block text-sm font-medium text-gray-700">First Name</label>
+              <input 
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Full Name"
+                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-xs" />
+            </div>
+
+            <div className="col-span-6">
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input 
+                type="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-xs" />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <input 
+                  type="password" 
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  className={`mt-1 w-full rounded-md border ${
+                    errors.password ? "border-red-500" : "border-gray-200"
+                  } bg-white text-sm text-gray-700 shadow-xs`}
+                />
+                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            </div>
+
+            <div className="col-span-6 sm:col-span-3">
+              <label className="block text-sm font-medium text-gray-700">Password Confirmation</label>
+              <input 
+                type="password" 
+                name="confirmPassword" 
+                value={formData.confirmPassword} 
+                onChange={handleChange}       
+                className={`mt-1 w-full rounded-md border ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-200"
+                } bg-white text-sm text-gray-700 shadow-xs`} 
+              />
+              {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+            </div>
+
+            <div className="col-span-6">
+              <p className="text-sm text-gray-500">
+                By creating an account, you agree to our
+                <a href="#" className="text-gray-700 underline"> terms and conditions </a>
+                and
+                <a href="#" className="text-gray-700 underline"> privacy policy</a>.
+              </p>
+            </div>
+            <div className="col-span-6 sm:flex sm:items-center sm:gap-4 justify-between">
+            <button
+              type="submit"
+              className="inline-block rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:ring-3 focus:outline-none"
+              disabled={errors.password || errors.confirmPassword || !formData.password || !formData.confirmPassword || !!errors.password}  // ✅ Fix: Ensure errors are checked properly
+            >
+              Create an account
+            </button>
+              <p className="mt-4 text-sm text-gray-500 sm:mt-0">
+                Already have an account?
+                <a href="#" className="text-gray-700 underline"> Log in</a>.
+              </p>
+            </div>
+          </form>
+        </main>
       </div>
-    </div>
-  );
-};
+    </section>
+  </div>
+);
+}
 
 export default SignUpModal;

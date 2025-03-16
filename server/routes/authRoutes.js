@@ -9,10 +9,10 @@ const router = express.Router();
 router.post("/signup", async (req, res) => {
   try {
     console.log("Signup request received:", req.body); // ✅ Debugging log
-    const { username, email, address, password, type } = req.body;
+    const { username, email, password, type } = req.body;
 
-    if (!username || !email || !address || !password) {
-      console.log("Missing fields:", { username, email, address, password }); // ✅ Log missing fields
+    if (!username || !email || !password) {
+      console.log("Missing fields:", { username, email, password }); // ✅ Log missing fields
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -25,7 +25,6 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({
       username,
       email,
-      address,
       password: hashedPassword,
       type: type === "worker" ? "worker" : "client", // 🔥 Enforce default behavior
     });
