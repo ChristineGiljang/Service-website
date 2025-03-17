@@ -52,11 +52,11 @@ router.get("/:id", async (req, res) => {
 
 // ✅ Update User Info
 router.put("/:id", async (req, res) => {
-    const { username, email, address, profileImage } = req.body; 
+    const { username, email, profileImage } = req.body; 
     try {
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id, 
-            { username, email, address, profileImage }, 
+            { username, email, profileImage }, 
             { new: true, upsert: true }
         );
         res.json(updatedUser);

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react"; 
 
 
-const SignUpModal = ({ isOpen, onClose }) => {
+const SignUpModal = ({ isOpen, onClose, switchToLogin }) => {
   const navigate = useNavigate(); 
+  const [openSignUp, setOpenSignUp] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -106,13 +107,13 @@ const SignUpModal = ({ isOpen, onClose }) => {
             onSubmit={handleSignUp}>
 
             <div className="col-span-6 sm:col-span-6">
-              <label className="block text-sm font-medium text-gray-700">First Name</label>
+              <label className="block text-sm font-medium text-gray-700">Name</label>
               <input 
                 type="text"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="Full Name"
+                placeholder="Name"
                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-xs" />
             </div>
 
@@ -168,13 +169,13 @@ const SignUpModal = ({ isOpen, onClose }) => {
             <button
               type="submit"
               className="inline-block rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:ring-3 focus:outline-none"
-              disabled={errors.password || errors.confirmPassword || !formData.password || !formData.confirmPassword || !!errors.password}  // ✅ Fix: Ensure errors are checked properly
+              disabled={errors.password || errors.confirmPassword || !formData.password || !formData.confirmPassword || !!errors.password} 
             >
               Create an account
             </button>
               <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                 Already have an account?
-                <a href="#" className="text-gray-700 underline"> Log in</a>.
+                <a onClick={switchToLogin} className="text-gray-700 underline cursor-pointer"> Log in</a>.
               </p>
             </div>
           </form>

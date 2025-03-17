@@ -1,20 +1,19 @@
-const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
+import { useState } from "react";
+import SignUpModal from "./SignUpModal";
+import LoginModal from "./LoginModal";
+
+const AuthModal = ({ isOpen, onClose }) => {
+  const [isSignUp, setIsSignUp] = useState(true);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 px-4">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md relative">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-        >
-          ✖
-        </button>
-
-        {/* Modal Content */}
-        {children}
-      </div>
-    </div>
+      <>
+      {isSignUp ? (
+        <SignUpModal isOpen={isOpen} onClose={onClose} switchToLogin={() => setIsSignUp(false)} />
+      ) : (
+        <LoginModal isOpen={isOpen} onClose={onClose} switchToSignUp={() => setIsSignUp(true)} />
+      )}
+    </>
   );
 };
+
+export default AuthModal;

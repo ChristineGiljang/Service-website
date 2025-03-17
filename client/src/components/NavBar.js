@@ -6,7 +6,7 @@ import SignUpModal from "./SignUpModal";
 import MobileFooter from "./MobileFooter";
 import ServiceProviderButton from "./ServiceProviderButton";
 
-const Navbar = () => {
+const Navbar = ({ onOpenAuthModal }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -105,14 +105,16 @@ const Navbar = () => {
           onClose={() => setLoginOpen(false)} 
           switchToSignUp={switchToSignUp}  // ✅ Ensure it's passed here too
         />
-        <SignUpModal isOpen={signUpOpen} onClose={() => setSignUpOpen(false)} />
+        <SignUpModal 
+          isOpen={signUpOpen} 
+          onClose={() => setSignUpOpen(false)}
+          switchToLogin={() => { setSignUpOpen(false); setLoginOpen(true); }} />
       </nav>
       
       {/* Mobile Menu Button */}
       {isOpen && (
         <div className="md:hidden flex flex-col bg-gray-800 text-white px-6 py-4 space-y-2">
           <a href="#" className="hover:bg-gray-700 px-3 py-2 rounded-md">Find Services</a>
-          <a href="#" className="hover:bg-gray-700 px-3 py-2 rounded-md">Offer Services</a>
           <a href="#" className="hover:bg-gray-700 px-3 py-2 rounded-md">Contact Us</a>
           <hr className="border-gray-600" />
 
@@ -121,18 +123,7 @@ const Navbar = () => {
           ) : (
             <>
               {/* ✅ Add Login & Sign Up buttons for mobile */}
-              <button 
-                onClick={() => setLoginOpen(true)} 
-                className="w-full text-left px-3 py-2 rounded-md hover:bg-gray-700"
-              >
-                Login
-              </button>
-              <button 
-                onClick={() => setSignUpOpen(true)} 
-                className="w-full text-left px-3 py-2 rounded-md bg-[#008080] hover:bg-[#006666]"
-              >
-                Sign Up
-              </button>
+              <ServiceProviderButton onClick={onClick}/>
             </>
           )}
         </div>

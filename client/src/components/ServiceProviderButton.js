@@ -2,7 +2,7 @@ const ServiceProviderButton = ({ onClick }) => {
     return (
       <button
         onClick={onClick}
-        className="bg-[#008080] hover:bg-[#006666] text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300"
+        className="rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:white focus:ring-3 focus:outline-non"
       >
         Be a Service Provider
       </button>

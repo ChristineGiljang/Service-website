@@ -9,12 +9,12 @@ const AccountPreferences = () => {
     const [user, setUser] = useState({
         username: "",
         email: "",
-        address: "",
         profileImage: defaultProfileImage, // Default placeholder
       });
     
       useEffect(() => {
         const storedUserId = localStorage.getItem("userId");
+        console.log("Retrieved User ID:", storedUserId);
         if (storedUserId) setUserId(storedUserId);
     }, []);
 
@@ -31,7 +31,6 @@ const AccountPreferences = () => {
                     ...prevUser,
                     username: data.username || "",
                     email: data.email || "",
-                    address: data.address || "",
                     profileImage: data.profileImage || "https://via.placeholder.com/80"
                 }));
             } catch (error) {
@@ -77,7 +76,6 @@ const AccountPreferences = () => {
     const handleUpdate = async () => {
         const updatedUser = {
             username: user.username, 
-            address: user.address, 
             profileImage: user.profileImage
         };
 
@@ -142,10 +140,6 @@ const AccountPreferences = () => {
         <div>
           <label className="text-gray-600 text-sm">Email</label>
           <input type="text" className="w-full border px-3 py-2 rounded-md" name="email" value={user.email} onChange={handleChange} />
-        </div>
-        <div>
-          <label className="text-gray-600 text-sm">Address</label>
-          <input type="text" className="w-full border px-3 py-2 rounded-md" name="address" value={user.address} onChange={handleChange} />
         </div>
       </div>
 

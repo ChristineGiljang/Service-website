@@ -80,41 +80,12 @@ const Hero = ({ searchTerm, setSearchTerm }) => {
   );
 };
 
-const CategoriesList = () => {
-  return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
-        Categories
-      </h1>
-
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {categories.map((category, index) => (
-          <div key={index} className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-800 mb-2">{category.name}</h2>
-            <ul className="space-y-1">
-              {category.services.map((service, i) => (
-                <li key={i}>
-                  <a href="#" className="text-blue-600 hover:underline">
-                    {service}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div>
       <Hero searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <CategoriesList />
     </div>
   );
 };

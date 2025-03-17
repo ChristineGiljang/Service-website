@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
     {
@@ -73,7 +74,8 @@ const categories = [
       },
   ];
 
-  const CategoriesList = () => {
+  const CategoriesList = ({ setSelectedService }) => {
+    const navigate = useNavigate();
     return (
       <div className="max-w-7xl mx-auto p-6">
          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">
@@ -86,8 +88,12 @@ const categories = [
               <ul className="space-y-1">
                 {category.services.map((service, i) => (
                   <li key={i}>
-                    <a href="#" className="text-blue-600 hover:underline">
-                      {service}
+                    <a onClick={() => {
+                        setSelectedService(service); // ✅ Update state
+                        navigate("/selectedservices", { state: { service } });; // ✅ Navigate to SelectedService
+                      }} 
+                      className="text-blue-600 hover:underline">
+                        {service}
                     </a>
                   </li>
                 ))}

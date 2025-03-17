@@ -4,6 +4,7 @@ import Navbar from "./NavBar";
 import AccountPreferences from "./AccountPreferences";
 import MobileFooter from "./MobileFooter";
 import CreateService from "./CreateServices";
+import Calendar from "./Calendar";
 
 const Sidebar = ({ setActiveComponent }) => {
     return (
@@ -27,7 +28,7 @@ const Sidebar = ({ setActiveComponent }) => {
             </li>
             <li
               className="flex items-center space-x-3 text-gray-700 cursor-pointer hover:text-blue-600"
-              onClick={() => setActiveComponent("SavedServices")}
+              onClick={() => setActiveComponent("Calendar")}
             >
               <BookMarked size={20} />
               <span>Saved services</span>
@@ -53,8 +54,8 @@ const Layout = () => {
             return <AccountPreferences />;
         case "PostServices":
             return <CreateService />;
-        // case "SavedServices":
-        //     return <SavedServices />;
+         case "Calendar":
+             return <Calendar />;
         // case "Inbox":
         //     return <Inbox />;
         default:

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 
 const categories = [
@@ -17,6 +17,7 @@ const CreateService = ({ providerId }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    location:"",
     skills: [],
     images: [],
     price: "",
@@ -25,31 +26,36 @@ const CreateService = ({ providerId }) => {
 
   const [step, setStep] = useState(1);
   const [userId, setUserId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredSkills, setFilteredSkills] = useState(allSkills);
 
-
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
+  }, []);
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSkillSelect = (e) => {
-    const selectedSkill = e.target.value;
-    if (!selectedSkill) return;
-  
-    setFormData((prev) => {
-      // Ensure the skill isn't already in the list (limit to 5)
-      if (prev.skills.includes(selectedSkill)) return prev;
-  
-      return {
-        ...prev,
-        skills: [...prev.skills, selectedSkill].slice(0, 5), // Max 5 skills
-      };
-    });
-  
-    // Reset dropdown after selection (optional)
-    e.target.value = "";
+  const handleSkillInputChange = (e) => {
+    const input = e.target.value;
+    setSearchTerm(input);
+    setFilteredSkills(allSkills.filter(skill => skill.toLowerCase().includes(input.toLowerCase())));
   };
 
+  const handleSelectSkill = (skill) => {
+    if (!formData.skills.includes(skill) && formData.skills.length < 5) {
+      setFormData(prev => ({
+        ...prev,
+        skills: [...prev.skills, skill],
+      }));
+    }
+    setSearchTerm(""); // Clear input after selection
+  };
   const removeSkill = (skill) => {
     setFormData((prev) => ({
       ...prev,
@@ -82,8 +88,9 @@ const CreateService = ({ providerId }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
+          userId: userId || providerId || localStorage.getItem("userId"),
           name: formData.name,
+          location: formData.location,
           description: formData.description,
           skills: formData.skills,
           images: formData.images.map((img) => (typeof img === "string" ? img : "")),
@@ -129,27 +136,48 @@ const CreateService = ({ providerId }) => {
               required
               className="w-full p-2 border rounded"
             ></textarea>
-              <div>
-                <h3 className="font-semibold mb-2">Select up to 5 skills:</h3>
-                <select className="w-full p-2 border rounded" onChange={handleSkillSelect}>
-                  <option value="">Select a skill</option>
-                  {allSkills.map((skill, index) => (
-                    <option key={index} value={skill}>
+
+            <textarea
+              name="location"
+              placeholder="Location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border rounded"
+            ></textarea>
+
+            <div>
+              <h3 className="font-semibold mb-2">Select up to 5 skills:</h3>
+              <input
+                type="text"
+                placeholder="Search skills"
+                value={searchTerm}
+                onChange={handleSkillInputChange}
+                className="w-full p-2 border rounded"
+              />
+              {searchTerm && (
+                <div className="border mt-1 rounded shadow bg-white max-h-40 overflow-auto">
+                  {filteredSkills.map((skill, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleSelectSkill(skill)}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                    >
                       {skill}
-                    </option>
+                    </div>
                   ))}
-                </select>
+                </div>
+              )}
 
                 <div className="mt-2">
                   {formData.skills.map((skill, index) => (
                     <span key={index} className="inline-block bg-gray-200 text-gray-800 px-2 py-1 rounded mr-2">
-                      {skill} 
+                      {skill}
                       <button onClick={() => removeSkill(skill)} className="ml-1 text-red-500">✕</button>
                     </span>
                   ))}
                 </div>
               </div>
-
             <input
               type="file"
               multiple
