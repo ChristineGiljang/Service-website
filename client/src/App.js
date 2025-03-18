@@ -5,6 +5,8 @@ import ProfilePage from "./Pages/ProfilePage";
 import AuthModal from "./components/Modal";
 import CategoriesList from "./components/CategoriesList";
 import SelectedService from "./components/SelectedServices";
+import Dashboard from "./Pages/Dashboard";
+import Layout from "./Pages/LandingPage";
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,16 +17,9 @@ return(
     <AuthModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
 
     <Routes>
-    <Route
-          path="/"
-          element={
-            <div>
-              <NavBar />
-              <CategoriesList setSelectedService={setSelectedService} />
-            </div>
-          }
-        />
+      <Route path="/" element={<Layout/>}/>
       <Route path="/profile" element={< ProfilePage />} />
+      <Route path="/dashboard" element={< Dashboard/>}/>
       <Route path="/selectedservices" element={< SelectedService />} />
     </Routes>
   </Router>

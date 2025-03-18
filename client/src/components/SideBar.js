@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { User, Briefcase, BookMarked, Mail } from "lucide-react";
-import Navbar from "./NavBar";
+import Navbar from "./layout/NavBar";
 import AccountPreferences from "./AccountPreferences";
 import MobileFooter from "./MobileFooter";
 import CreateService from "./CreateServices";

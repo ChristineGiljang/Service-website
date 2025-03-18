@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SignUpModal from "./SignUpModal";
-import LoginModal from "./LoginModal";
+import SignUpModal from "./auth/SignUpModal";
+import LoginModal from "./auth/LoginModal";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const [isSignUp, setIsSignUp] = useState(true);
